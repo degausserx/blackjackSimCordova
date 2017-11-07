@@ -37,13 +37,16 @@ export class SimulationPage {
   totalUnits(): number {
     return (this.unitsLost + this.unitsWon);
   }
+
   edge(): number {
     let total = this.totalUnits();
     return +(((this.unitsLost / total) - (this.unitsWon / total)) * 100.0).toFixed(4);
   }
+
   blackjackPercent(): number {
     return +(((this.simulation.splitacesnobjs) ? (this.blackjacks / this.games) : (this.blackjacks / this.hands)) * 100.0).toFixed(4);
   }
+
   dealerBustRate(): number {
     return +((this.dealerBust / this.games) * 100.0).toFixed(4);
   }
@@ -172,11 +175,11 @@ export class SimulationPage {
 
     var getPlayer = (player: number, dealer: number, dealerFinish: number, split: number, entry: boolean): number => {
       // declarations
-      var newCard: number = 0, hit: number = 0, cards: number = (entry) ? 0 : 1;
-      var playerHand: number = player, dealerHand: number = dealerFinish, splitHand: number = split;
-      var blackjack: boolean = false, doubleBet: boolean = false, pair: boolean = false, soft: boolean = false;
-      var allowSplit: boolean = true, looping: boolean = true, noCards: boolean = false;
-      var playerString: string, strat: string, tempNum: number = 0;
+      let newCard: number = 0, hit: number = 0, cards: number = (entry) ? 0 : 1;
+      let playerHand: number = player, dealerHand: number = dealerFinish, splitHand: number = split;
+      let blackjack: boolean = false, doubleBet: boolean = false, pair: boolean = false, soft: boolean = false;
+      let allowSplit: boolean = true, looping: boolean = true;
+      let playerString: string, strat: string, tempNum: number = 0;
 
       // run loops
       while (looping) {
@@ -200,20 +203,22 @@ export class SimulationPage {
           newCard += playerHand;
           if (newCard == 21) {
             if (splitHand == 0 || !simulation.splitacesnobjs) blackjack = true;
+            playerHand = newCard;
             break;
           }
-          if (player == 11 && splitHand > 0 && simulation.splitacesone) {
-            noCards = true;
-            if (newCard != 22 || !allowSplit) break; // fixed
+          if (playerHand == 11 && splitHand > 0 && simulation.splitacesone) {
+            if (newCard != 22 || (newCard == 22 && !allowSplit)) {
+              playerHand = (newCard == 22) ? 12 : newCard;
+              break;
+            }
           }
-          if (newCard == 22) newCard -= 10;
-          playerHand = newCard;
+          playerHand = (newCard == 22) ? 12 : newCard;
         }
 
         // strategy
         // simulation loop
         if (!blackjack) {
-          if (simulation.holecard && dealerFinish == 35 && !simulation.surrender) break;
+          if (simulation.holecard && dealerFinish == 35 && (!simulation.surrender || (simulation.surrender && !simulation.surrenderearly))) break;
           while (playerHand < 21) {
             playerString = '';
             if (cards > 2) pair = false;
@@ -225,30 +230,24 @@ export class SimulationPage {
                 playerString = '' + tempNum + tempNum;
               }
             }
-            else if (soft) playerString = (playerHand == 12) ? '12' : 'A' + (playerHand - 11);
+            else if (soft) playerString = (playerHand == 12) ? 'AAA' : 'A' + (playerHand - 11);
             else playerString = '' + playerHand;
             
             // make a call for the strategy. 'dealer' is an int
-            strat = simulation.strat.get(playerString).get(dealer);
-            
-            // didn't surrender, can't draw cards...
-            if (noCards && strat != 'S') break;
+            strat = (playerString != "AAA") ? simulation.strat.get(playerString).get(dealer) : 'H';
             
             // if the move is "surrender" or "surrender, otherwise stand"
             if (strat == 'A' || strat == 'B') {
-              if ((cards > 2 || !simulation.surrender || splitHand > 0 || (!simulation.surrendervsace && dealer == 11)
-                    || (!simulation.surrenderearly && simulation.holecard && dealerHand == 35))) {
-                if (strat == 'B') break;
-                hit = 1;
-              }
-              else {
+              if (cards == 2 && simulation.surrender && splitHand == 0 && (simulation.surrendervsace || dealer != 11)) {
                 playerHand = -5;
                 break;
               }
+              if (strat == 'B') break;
+              hit = 1;
             }
                 
             // if the dealer has blackjack, after the chance to surrender, auto lose
-            if (cards == 2 && dealerFinish == 35 && simulation.holecard)  break;
+            if (cards == 2 && dealerFinish == 35 && simulation.holecard) break;
                 
             // if the move is 'no card'
             if (strat == 'X') break;
@@ -265,8 +264,11 @@ export class SimulationPage {
                 
             // double the bet
             if (strat == 'D' || strat == 'E') {
-              if (soft && !simulation.doubleonsoft && strat == 'E')  break;
-              hit = 2;
+              if ((soft && !simulation.doubleonsoft) || cards > 2) {
+                if (strat == 'E') break;
+                else hit = 1;
+              }
+              else hit = 2;
             }
                 
             // if the move is taking a card
@@ -282,13 +284,16 @@ export class SimulationPage {
                 soft = false;
                 playerHand -= 10;
               }
-              if (cards == 2 && hit == 2 && (!soft || (soft && simulation.doubleonsoft))) doubleBet = true;
+              if (cards == 2 && hit == 2 && (!soft || (soft && simulation.doubleonsoft))) {
+                doubleBet = true;
+              }
               
               // reset 'hit', increase cards
               cards++;
               hit = 0;
             }
           }
+          if (doubleBet) break;
         }
 
         pair = false;
@@ -315,7 +320,9 @@ export class SimulationPage {
         simulation.dealer_win++;
         if (doubleBet) simulation.units_lost += 4;
         else if (playerHand == -5) simulation.units_lost++;
-        else simulation.units_lost += 2;
+        else {
+          simulation.units_lost += 2;
+        }
       }
     
       // player draw

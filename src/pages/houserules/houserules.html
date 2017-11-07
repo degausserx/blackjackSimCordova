@@ -9,14 +9,14 @@
     <ion-list-header color="colGreen">VARIABLE INTEGERS</ion-list-header>
     <ion-item>
       <ion-label>Decks</ion-label>
-      <ion-select [(ngModel)]="numberDecksOption" [compareWith]="compareFn" (ngModelChange)="changeSelection('decks')" interface="action-sheet">
-        <ion-option *ngFor="let n of decks" [value]="n">{{n.title}}</ion-option>
+      <ion-select [(ngModel)]="decks" [compareWith]="compareFn" (ngModelChange)="changeSelection('decks')" interface="action-sheet">
+        <ion-option *ngFor="let n of deckSelection" [value]="n">{{n.title}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Maximum splits</ion-label>
-      <ion-select [(ngModel)]="maxSplitOption" [compareWith]="compareFn" (ngModelChange)="changeSelection('maxsplits')" interface="action-sheet">
-        <ion-option *ngFor="let n of splits" [value]="n">{{n.title}}</ion-option>
+      <ion-select [(ngModel)]="maxsplits" [compareWith]="compareFn" (ngModelChange)="changeSelection('maxsplits')" interface="action-sheet">
+        <ion-option *ngFor="let n of splitSelection" [value]="n">{{n.title}}</ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
@@ -56,7 +56,7 @@
     </ion-item>  
     <ion-item>
       <ion-label> Early surrender</ion-label>
-      <ion-toggle [(ngModel)]="settingsProvider.house.earlysurrender" (ngModelChange)="changeSelection('earlysurrender')" color="colBlue"></ion-toggle>
+      <ion-toggle [(ngModel)]="settingsProvider.house.surrenderearly" (ngModelChange)="changeSelection('surrenderearly')" color="colBlue"></ion-toggle>
     </ion-item>  
   </ion-list>
 </ion-content>

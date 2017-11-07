@@ -9,36 +9,31 @@ import { SettingsProvider } from '../../app/providers/settings.provider';
 
 export class HouseRulesPage {
 
-    maxSplitOption: any;
-    numberDecksOption: any;
-
-    splits: any;
+    deckSelection: any;
+    splitSelection: any;
+    maxsplits: any;
     decks: any;
 
     constructor(public navCtrl: NavController, public settingsProvider: SettingsProvider) {
 
-        this.decks = [
+        this.deckSelection = [
             { index: 1, title: "One" },
             { index: 2, title: "Two" },
             { index: 3, title: "Three" },
             { index: 4, title: "Four" },
             { index: 6, title: "Six" },
             { index: 8, title: "Eight" }
-        ]
+        ];
 
-        this.splits = [
+        this.splitSelection = [
             { index: 0, title: "Unlimited" },
             { index: 1, title: "One" },
             { index: 2, title: "Two" },
             { index: 3, title: "Three" }
-        ]
+        ];
 
-        var newMaxSplits = this.splits.filter(entry => entry.index === this.settingsProvider.house.maxsplits)[0];
-        var newNumberDecks = this.decks.filter(entry => entry.index === this.settingsProvider.house.decks)[0];
-
-        this.maxSplitOption = newMaxSplits;
-        this.numberDecksOption = newNumberDecks;
-
+        this.maxsplits = this.splitSelection.filter(entry => entry.index === this.settingsProvider.house.maxsplits)[0];
+        this.decks = this.deckSelection.filter(entry => entry.index === this.settingsProvider.house.decks)[0];
     }
 
     compareFn(option1: any, option2: any) {
@@ -46,17 +41,8 @@ export class HouseRulesPage {
     }
 
     changeSelection(ref: string) {
-        switch (ref) {
-            case 'decks':
-                this.settingsProvider.setValues('house', ref, this.numberDecksOption.index);
-                break;
-            case 'maxsplits':
-                this.settingsProvider.setValues('house', ref, this.maxSplitOption.index);
-                break;
-            default:
-                this.settingsProvider.updateBooleanValues(ref);
-                break;
-        }
+        if ((ref == 'decks') || (ref == 'maxsplits')) this.settingsProvider.setValues('house', ref, this[ref]['index']);
+        else this.settingsProvider.updateBooleanValues(ref);
     }
 
 }
