@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar color="colBlue">
+    <ion-title>Simulation</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div padding>
+    <div>
+        <progress-bar [progress]="loadProgress"></progress-bar>
+    </div>
+    <div>
+      <button ion-button icon-start [color]="(buttonTextStart === 'Start') ? 'colGreen' : 'colRed'" style="float: right;" (click)="startSimulation()">
+        <ion-icon [name]="(buttonTextStart === 'Start') ? 'ios-checkmark-circle' : 'ios-close-circle'"></ion-icon>
+        {{buttonTextStart}}
+      </button>
+    </div>
+  </div>
+  <div>
+    <ion-list>
+      <ion-list-header color="colGreen">
+          RESULTS
+      </ion-list-header>
+      <ion-item>
+        <ion-label color="primary">Games played</ion-label>
+        <ion-label class="ralign font20">{{this.games}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Individual hands</ion-label>
+        <ion-label class="ralign font20">{{this.hands}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Wins</ion-label>
+        <ion-label class="ralign font20">{{this.wins}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Draws</ion-label>
+        <ion-label class="ralign font20">{{this.draws}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Losses</ion-label>
+        <ion-label class="ralign font20">{{this.losses}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Units won</ion-label>
+        <ion-label class="ralign font20">{{this.unitsWon}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Units lost</ion-label>
+        <ion-label class="ralign font20">{{this.unitsLost}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Splits</ion-label>
+        <ion-label class="ralign font20">{{this.splits}}</ion-label>
+      </ion-item>      
+      <ion-item>
+        <ion-label color="primary">Player blackjack rate</ion-label>
+        <ion-label class="ralign font20">{{this.blackjackPercentText}}%</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Dealer bust rate</ion-label>
+        <ion-label class="ralign font20">{{this.dealerBustRateText}}%</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">House edge</ion-label>
+        <ion-label class="ralign font20">{{this.edgeText}}%</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

@@ -1,0 +1,42 @@
+page-playerstrat {
+
+    .cell {
+        margin: 1px;
+    }
+    
+    .cell-light {
+        background-color: map-get($colors, colG6);
+    }
+
+    .cell-blank {
+        background-color: map-get($colors, colWhite);
+    }
+
+    .cell-hit {
+        background-color: map-get($colors, colPurple);
+    }
+
+    .cell-stand {
+        background-color: map-get($colors, colOrange);
+    }
+
+    .cell-surrender {
+        background-color: map-get($colors, colYellow);
+    }
+
+    .cell-split {
+        background-color: map-get($colors, colAqua);
+    }
+
+    .cell-double {
+        background-color: map-get($colors, colGreen);
+    }
+
+    .tableRow {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+}

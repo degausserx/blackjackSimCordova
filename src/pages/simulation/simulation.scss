@@ -1,0 +1,54 @@
+page-simulation {
+    .progressBack {
+        background-color: map-get($colors, colBlue);
+    }
+    .formBack {
+        background-color: map-get($colors, colG7);
+    }
+
+    @mixin vertical-align($position: relative) {
+        position: $position;
+        top: 50%;
+        -webkit-transform: perspective(1px) translateY(-50%);
+        -ms-transform: perspective(1px) translateY(-50%);
+        transform: perspective(1px) translateY(-50%);
+      }
+      
+    .valign {
+        //@include vertical-align();
+        vertical-align: center;
+    }
+
+    .pt5 {
+        padding-top: 5px;
+    }
+    .pt10 {
+        padding-top: 10px;
+    }
+    .pb5 {
+        padding-bottom: 5px;
+    }
+    .pb10 {
+        padding-bottom: 10px;
+    }
+    .mt5 {
+        margin-top: 5px;
+    }
+    .mt10 {
+        margin-top: 10px;
+    }
+    .mb5 {
+        margin-bottom: 5px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+
+    .ralign {
+        text-align: right;
+    }
+
+    .font20 {
+        font-size: 20px;
+    }
+}

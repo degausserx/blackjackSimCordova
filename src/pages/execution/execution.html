@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar color="colBlue">
+    <ion-title>Execution</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding-vertical>
+  <ion-list>
+    <ion-list-header color="colGreen">CARD DEFAULTS</ion-list-header>
+    <ion-item>
+      <ion-label>Player card 1</ion-label>
+      <ion-select [(ngModel)]="player1" okText="Okay" cancelText="Cancel" [compareWith]="compareFn" (ngModelChange)="changeSelection('player1')" interface="action-sheet">
+        <ion-option *ngFor="let n of cardSelection" [value]="n">{{n.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Player card 2</ion-label>
+      <ion-select [(ngModel)]="player2" okText="Okay" cancelText="Cancel" [compareWith]="compareFn" (ngModelChange)="changeSelection('player2')" interface="action-sheet">
+        <ion-option *ngFor="let n of cardSelection" [value]="n">{{n.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Dealer card</ion-label>
+      <ion-select [(ngModel)]="dealer" okText="Okay" cancelText="Cancel" [compareWith]="compareFn" (ngModelChange)="changeSelection('dealer')" interface="action-sheet">
+        <ion-option *ngFor="let n of cardSelection" [value]="n">{{n.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header color="colGreen">PROCESSING</ion-list-header>
+    <ion-item>
+      <ion-label>Number of hands</ion-label>
+      <ion-select [(ngModel)]="loops" okText="Okay" cancelText="Cancel" (ngModelChange)="changeSelection('loops')" interface="action-sheet">
+        <ion-option *ngFor="let n of loopSelection" [value]="n">{{n}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

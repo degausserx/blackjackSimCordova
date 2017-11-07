@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar color="colBlue">
+    <ion-title>House rules</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding-vertical>
+  <ion-list>
+    <ion-list-header color="colGreen">VARIABLE INTEGERS</ion-list-header>
+    <ion-item>
+      <ion-label>Decks</ion-label>
+      <ion-select [(ngModel)]="numberDecksOption" [compareWith]="compareFn" (ngModelChange)="changeSelection('decks')" interface="action-sheet">
+        <ion-option *ngFor="let n of decks" [value]="n">{{n.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Maximum splits</ion-label>
+      <ion-select [(ngModel)]="maxSplitOption" [compareWith]="compareFn" (ngModelChange)="changeSelection('maxsplits')" interface="action-sheet">
+        <ion-option *ngFor="let n of splits" [value]="n">{{n.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header color="colGreen">RULE SWITCHES</ion-list-header>
+    <ion-item>
+      <ion-label> Hole card</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.holecard" (ngModelChange)="changeSelection('holecard')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Dealer draws on soft 17</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.draw17" (ngModelChange)="changeSelection('draw17')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Double on soft hands</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.doubleonsoft" (ngModelChange)="changeSelection('doubleonsoft')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Split aces one card</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.splitacesone" (ngModelChange)="changeSelection('splitacesone')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Split aces no blackjacks</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.splitacesnobjs" (ngModelChange)="changeSelection('splitacesnobjs')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Resplit aces</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.resplitaces" (ngModelChange)="changeSelection('resplitaces')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Surrender</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.surrender" (ngModelChange)="changeSelection('surrender')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Surrender against ace</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.surrendervsace" (ngModelChange)="changeSelection('surrendervsace')" color="colBlue"></ion-toggle>
+    </ion-item>  
+    <ion-item>
+      <ion-label> Early surrender</ion-label>
+      <ion-toggle [(ngModel)]="settingsProvider.house.earlysurrender" (ngModelChange)="changeSelection('earlysurrender')" color="colBlue"></ion-toggle>
+    </ion-item>  
+  </ion-list>
+</ion-content>

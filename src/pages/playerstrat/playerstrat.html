@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar color="colBlue">
+    <ion-title>Player strategy</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid text-center>
+      <ion-row *ngFor="let p of playerColumn">
+        
+        <div *ngIf="p == '' then placeHolderRow"></div>
+        <div *ngIf="p != '' then dataRow"></div>
+
+        <ng-template #placeHolderRow>
+            <ion-col class="cell cell-blank"></ion-col>
+            <ion-col *ngFor="let d of dealerRow; let i = index" col-1 class="cell cell-light">{{d}}</ion-col>
+        </ng-template>
+
+        <ng-template #dataRow>
+            <ion-col class="cell cell-light">{{p}}</ion-col>
+            <ion-col *ngFor="let d of dealerRow; let i = index" col-1 class="cell {{getCell(p, d)}}" (click)="clickCell(p, d)">
+              {{strat}}
+            </ion-col>
+        </ng-template>
+
+      </ion-row>
+    </ion-grid>
+  </ion-content>
