@@ -69,9 +69,7 @@ export class PlayerStratPage {
     } else {
       dealerInt = +dealer;
     }
-    this.settingsProvider.player.putBaseStrat(player, dealerInt, strategy);
-
-    // update cell
+    this.settingsProvider.changeCell(player, dealerInt, strategy);
   }
 
   clickCell(player: string, dealer: string) {

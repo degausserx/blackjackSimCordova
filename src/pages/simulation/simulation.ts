@@ -118,6 +118,7 @@ export class SimulationPage {
   }
 
   runSimulation(simulation: Simulation, index: number) {
+    
     let promise = this._webWorkerService.run(this.processSimulation, simulation);
     promise.then((newSimulation) => {
       index++;

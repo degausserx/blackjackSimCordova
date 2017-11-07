@@ -12,6 +12,13 @@ export class SettingsProvider {
     player: Player;
     simulation: Simulation;
 
+    dealerMap = [1,2,3,4,5,6,7,8,9,10,11];
+    playerMap = [
+        '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20',
+        'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9',
+        'AA', '22', '33', '44', '55', '66', '77', '88', '99', 'TT'
+    ];
+
     constructor() {
         this.execution = new Execution();
         this.house = new House();
@@ -35,6 +42,13 @@ export class SettingsProvider {
             let surrenderearly = localStorage.getItem('surrenderearly');
             let decks = localStorage.getItem('decks');
             let maxsplits = localStorage.getItem('maxsplits');
+
+            for (let p in this.playerMap) {
+                for (let d in this.dealerMap) {
+                    let value = localStorage.getItem(p + ':' + d);
+                    if (this.check(value)) this.player.putBaseStrat(p, +d, value);
+                }
+            }
 
             if (this.check(player1)) this.execution.player1 = +player1;
             if (this.check(player2)) this.execution.player2 = +player2;
@@ -74,4 +88,8 @@ export class SettingsProvider {
         localStorage.setItem(ref, '' + this.house[ref]);
     }
 
+    changeCell(player: string, dealer: number, strat: string) {
+        this.player.putBaseStrat(player, dealer, strat);
+        localStorage.setItem(player + ':' + dealer, strat);
+    }
 }

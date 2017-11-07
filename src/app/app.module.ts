@@ -13,7 +13,6 @@ import { ProgressBarComponent } from '../components/progress-bar/progress-bar';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SettingsProvider } from './providers/settings.provider';
-import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -23,12 +22,11 @@ import { IonicStorageModule } from '@ionic/storage';
     PlayerStratPage,
     ExecutionPage,
     TabsPage,
-    ProgressBarComponent
+    ProgressBarComponent,
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
