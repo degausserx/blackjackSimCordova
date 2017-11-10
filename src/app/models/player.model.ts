@@ -148,7 +148,7 @@ export class Player {
         map_17.set(8, "X");
         map_17.set(9, "X");
         map_17.set(10, "X");
-        map_17.set(11, "A");
+        map_17.set(11, "B");
         map_18.set(2, "X");
         map_18.set(3, "X");
         map_18.set(4, "X");

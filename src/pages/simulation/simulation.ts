@@ -93,6 +93,10 @@ export class SimulationPage {
     if (simulation.dealer != 1) simulation.deckSource.splice(simulation.deckSource.indexOf(simulation.dealer), 1);
     simulation.deck = simulation.deckSource.slice();
 
+    console.log(simulation.deckSource.filter((num) => {
+      return (num == 10) // integrity check, result = decks * 16
+    }).length)
+
     return simulation;
   }
 
@@ -106,8 +110,8 @@ export class SimulationPage {
     this.wins = this.simulation.dealer_lose;
     this.losses = this.simulation.dealer_win;
     this.draws = this.simulation.dealer_draw;
-    this.unitsWon = this.simulation.units_won;
-    this.unitsLost = this.simulation.units_lost;
+    this.unitsWon = this.simulation.units_won / 2;
+    this.unitsLost = this.simulation.units_lost / 2;
     this.splits = this.simulation.splits;
     this.dealerBust = this.simulation.dealer_bust;
     this.blackjacks = this.simulation.blackjacks;
@@ -144,7 +148,7 @@ export class SimulationPage {
 
     let drawCard = (): number => {
       if (simulation.deck.length < 1) shuffle();
-      let randomNum: number = Math.floor(Math.random() * simulation.deck.length);
+      let randomNum: number = ~~(Math.random() * simulation.deck.length);
       let returnInt: number = simulation.deck[randomNum];
       simulation.deck.splice(randomNum, 1);
       return returnInt;
@@ -174,47 +178,46 @@ export class SimulationPage {
       return total;
     }
 
-    var getPlayer = (player: number, dealer: number, dealerFinish: number, split: number, entry: boolean): number => {
+    let getPlayer = (player: number, dealer: number, dealerFinish: number, split: number, entry: boolean): number => {
       // declarations
-      let newCard: number = 0, hit: number = 0, cards: number = (entry) ? 0 : 1;
-      let playerHand: number = player, dealerHand: number = dealerFinish, splitHand: number = split;
-      let blackjack: boolean = false, doubleBet: boolean = false, pair: boolean = false, soft: boolean = false;
-      let allowSplit: boolean = true, looping: boolean = true;
-      let playerString: string, strat: string, tempNum: number = 0;
+      var newCard: number = 0, hit: number = 0, cards: number = (entry) ? 0 : 1;
+      var playerHand: number = player, dealerHand: number = dealerFinish, splitHand: number = split;
+      var blackjack: boolean = false, doubleBet: boolean = false, pair: boolean, soft: boolean = false;
+      var allowSplit: boolean = true, looping: boolean = true;
+      var playerString: string, strat: string, tempNum: number = 0;
 
       // run loops
       while (looping) {
         looping = false;
+        pair = false; // *fixed
 
-        // setup
-        if (cards < 2) {
-          newCard = (splitHand < 1 && simulation.player1 != 1) ? simulation.player1 : drawCard();
+        // *fixed
+        newCard = (splitHand < 1 && simulation.player1 != 1) ? simulation.player1 : drawCard();
+        cards += 1;
+        if (cards == 1) {
+          playerHand = (splitHand < 1 && simulation.player2 != 1) ? simulation.player2 : drawCard();
           cards += 1;
-          if (cards == 1) {
-            playerHand = (splitHand < 1 && simulation.player2 != 1) ? simulation.player2 : drawCard();
-            cards += 1;
+        }
+        if (playerHand == 11 || newCard == 11) soft = true;
+        if (playerHand == newCard) {
+          pair = true;
+          if ((playerHand == 11 && splitHand > 0 && !simulation.resplitaces) || (splitHand >= simulation.maxsplits && simulation.maxsplits != 0)) {
+            allowSplit = false;
           }
-          if (playerHand == 11 || newCard == 11) soft = true;
-          if (playerHand == newCard) {
-            pair = true;
-            if ((playerHand == 11 && splitHand > 0 && !simulation.resplitaces) || (splitHand >= simulation.maxsplits && simulation.maxsplits != 0)) {
-              allowSplit = false;
-            }
-          }
-          newCard += playerHand;
-          if (newCard == 21) {
-            if (splitHand == 0 || !simulation.splitacesnobjs) blackjack = true;
-            playerHand = newCard;
+        }
+        newCard += playerHand;
+        if (newCard == 21) {
+          if (splitHand == 0 || !simulation.splitacesnobjs) blackjack = true;
+          playerHand = newCard;
+          break;
+        }
+        if (playerHand == 11 && splitHand > 0 && simulation.splitacesone) {
+          if (newCard != 22 || (newCard == 22 && !allowSplit)) {
+            playerHand = (newCard == 22) ? 12 : newCard;
             break;
           }
-          if (playerHand == 11 && splitHand > 0 && simulation.splitacesone) {
-            if (newCard != 22 || (newCard == 22 && !allowSplit)) {
-              playerHand = (newCard == 22) ? 12 : newCard;
-              break;
-            }
-          }
-          playerHand = (newCard == 22) ? 12 : newCard;
         }
+        playerHand = (newCard == 22) ? 12 : newCard;
 
         // strategy
         // simulation loop
@@ -265,7 +268,7 @@ export class SimulationPage {
                 
             // double the bet
             if (strat == 'D' || strat == 'E') {
-              if ((soft && !simulation.doubleonsoft) || cards > 2) {
+              if ((soft && !simulation.doubleonsoft) || cards > 2 || (splitHand > 0 && playerHand == 12)) { // *fixed
                 if (strat == 'E') break;
                 else hit = 1;
               }
@@ -293,11 +296,10 @@ export class SimulationPage {
               cards++;
               hit = 0;
             }
+            if (doubleBet) break; // *fixed
           }
-          if (doubleBet) break;
         }
 
-        pair = false;
       }
 
       // apply stats
@@ -310,7 +312,9 @@ export class SimulationPage {
         dealerHand = 22;
         if (entry) simulation.dealer_bust++;
       }
-      if (playerHand > 21 && playerHand != 35) playerHand = 22;
+      if (playerHand > 21 && playerHand != 35) {
+        playerHand = 22;
+      }
     
       // games / hands
       if (entry) simulation.games++;
@@ -327,8 +331,10 @@ export class SimulationPage {
       }
     
       // player draw
-      else if (playerHand == dealerHand) simulation.dealer_draw++;
-    
+      else if (playerHand == dealerHand) {
+        simulation.dealer_draw++;
+      }
+
       // player win
       else {
         simulation.dealer_lose++;

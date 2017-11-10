@@ -9,29 +9,26 @@ import { SettingsProvider } from '../../app/providers/settings.provider';
 
 export class HouseRulesPage {
 
-    deckSelection: any;
-    splitSelection: any;
+    deckSelection = [
+        { index: 1, title: "One" },
+        { index: 2, title: "Two" },
+        { index: 3, title: "Three" },
+        { index: 4, title: "Four" },
+        { index: 6, title: "Six" },
+        { index: 8, title: "Eight" }
+    ];
+
+    splitSelection = [
+        { index: 0, title: "Unlimited" },
+        { index: 1, title: "One" },
+        { index: 2, title: "Two" },
+        { index: 3, title: "Three" }
+    ];
+    
     maxsplits: any;
     decks: any;
 
     constructor(public navCtrl: NavController, public settingsProvider: SettingsProvider) {
-
-        this.deckSelection = [
-            { index: 1, title: "One" },
-            { index: 2, title: "Two" },
-            { index: 3, title: "Three" },
-            { index: 4, title: "Four" },
-            { index: 6, title: "Six" },
-            { index: 8, title: "Eight" }
-        ];
-
-        this.splitSelection = [
-            { index: 0, title: "Unlimited" },
-            { index: 1, title: "One" },
-            { index: 2, title: "Two" },
-            { index: 3, title: "Three" }
-        ];
-
         this.maxsplits = this.splitSelection.filter(entry => entry.index === this.settingsProvider.house.maxsplits)[0];
         this.decks = this.deckSelection.filter(entry => entry.index === this.settingsProvider.house.decks)[0];
     }

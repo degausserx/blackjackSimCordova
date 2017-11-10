@@ -9,8 +9,6 @@ import { ActionSheetController } from 'ionic-angular'
 })
 export class PlayerStratPage {
 
-  rowIndex = 0;
-
   dealerRow = [
     '2', '3', '4', '5', '6', '7', '8', '9', '10', 'A'
   ];
@@ -21,36 +19,17 @@ export class PlayerStratPage {
     '', 'AA', '22', '33', '44', '55', '66', '77', '88', '99', 'TT', ''
   ];
 
-  lightOrDark(): string {
-    this.rowIndex++;
-    return (this.rowIndex % 2 != 0) ? "cell-dark" : "cell-light";
-  }
-
-  constructor(public navCtrl: NavController, public settingsProvider: SettingsProvider, public actionSheetCtrl: ActionSheetController) {
-    
-  }
+  constructor(public navCtrl: NavController, public settingsProvider: SettingsProvider, public actionSheetCtrl: ActionSheetController) {}
 
   strat: string;
 
   getStrat(player: string, dealer: string): string {
-    var dealerInt: number;
-    if (dealer == 'A') {
-      dealerInt = 11;
-    } else {
-      dealerInt = +dealer;
-    }
+    var dealerInt: number = (dealer == 'A') ? 11 : +dealer;
     return this.settingsProvider.player.getBaseStrat(player, dealerInt);
   }
 
   getCell(player: string, dealer: string): string {
-    var dealerInt: number;
-    if (dealer == 'A') {
-      dealerInt = 11;
-    } else {
-      dealerInt = +dealer;
-    }
-    this.strat = this.settingsProvider.player.getBaseStrat(player, dealerInt);
-
+    this.strat = this.getStrat(player, dealer);
     switch (this.strat) {
       case 'X': return 'cell-stand';
       case 'H': return 'cell-hit';
@@ -59,16 +38,12 @@ export class PlayerStratPage {
       case 'E': return 'cell-double';
       case 'A': return 'cell-surrender';
       case 'B': return 'cell-surrender';
+      default: return 'cell-blank';
     }
   }
 
   changeCell(player: string, dealer: string, strategy: string) {
-    var dealerInt: number;
-    if (dealer == 'A') {
-      dealerInt = 11;
-    } else {
-      dealerInt = +dealer;
-    }
+    var dealerInt: number = (dealer == 'A') ? 11 : +dealer;
     this.settingsProvider.changeCell(player, dealerInt, strategy);
   }
 

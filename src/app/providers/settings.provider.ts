@@ -12,7 +12,7 @@ export class SettingsProvider {
     player: Player;
     simulation: Simulation;
 
-    dealerMap = [1,2,3,4,5,6,7,8,9,10,11];
+    dealerMap = ['2','3','4','5','6','7','8','9','10','11'];
     playerMap = [
         '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20',
         'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9',
@@ -43,12 +43,12 @@ export class SettingsProvider {
             let decks = localStorage.getItem('decks');
             let maxsplits = localStorage.getItem('maxsplits');
 
-            for (let p in this.playerMap) {
-                for (let d in this.dealerMap) {
+            this.dealerMap.forEach((d, k) => {
+                this.playerMap.forEach((p, l) => {
                     let value = localStorage.getItem(p + ':' + d);
                     if (this.check(value)) this.player.putBaseStrat(p, +d, value);
-                }
-            }
+                });
+            });
 
             if (this.check(player1)) this.execution.player1 = +player1;
             if (this.check(player2)) this.execution.player2 = +player2;
