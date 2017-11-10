@@ -238,7 +238,7 @@ export class SimulationPage {
             else playerString = '' + playerHand;
             
             // make a call for the strategy. 'dealer' is an int
-            strat = (playerString != "AAA") ? simulation.strat.get(playerString).get(dealer) : 'H';
+            strat = (playerString != 'AAA') ? simulation.strat.get(playerString).get(dealer) : 'H';
             
             // if the move is "surrender" or "surrender, otherwise stand"
             if (strat == 'A' || strat == 'B') {
